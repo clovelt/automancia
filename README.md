@@ -38,13 +38,6 @@ file whenever it changes using the macOS-builtin `defaults` command (no extra
 dependency beyond the `python3 -m http.server` this project already requires), and
 serves the folder -- so it's still just one thing to run, same as the normal setup.
 
-**Known limitation**: on this build, the save only actually gets flushed to disk
-roughly every 7-10 seconds (verified empirically, not a fixed interval -- looks like
-the OS's own preferences-writing batches it), regardless of automancia's "update rate"
-setting. That ceiling is upstream of both `serve.command` and automancia itself, so
-don't expect real-time tracking to be as snappy as it is on the desktop builds, which
-write `.monkeystate` directly.
-
 ## HOW TO USE
 
 move around in cinco paus. pause after each move to let automancia catch up. it will (mostly) automatically track the game state.
