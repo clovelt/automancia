@@ -15,6 +15,36 @@ Automanica is a companion app to Cincomancia and Cinco Paus. It seeks to automat
 3) python -m http.server
 4) navigate to http://localhost:8000/
 
+## APPLE SILICON MAC / APP STORE VERSION
+
+If you're playing the App Store version of Cinco Paus on an Apple Silicon Mac (the
+"iPhone & iPad App" build, installed like a normal Mac app), the steps above won't
+find a save to read -- that build doesn't write a bare `.monkeystate` file at all. It
+stores the same save string inside its own preferences, under a key literally named
+`.monkeystate`, in a sandboxed container named by a random UUID rather than its bundle
+ID (so it isn't at the path you'd expect either).
+
+Instead:
+
+1) place `index.html`, `engine.js`, `cincomancia/`, and `serve.command` in the same
+   folder
+2) double-click `serve.command` (first launch: right-click it and choose "Open" once,
+   since it's an unsigned script and Gatekeeper will otherwise block it)
+3) navigate to http://localhost:8000/
+
+`serve.command` finds that save automatically (`~/Library/Containers/*/Data/Library/
+Preferences/com.mightyvision.cinco.plist`), mirrors it out to a real `.monkeystate`
+file whenever it changes using the macOS-builtin `defaults` command (no extra
+dependency beyond the `python3 -m http.server` this project already requires), and
+serves the folder -- so it's still just one thing to run, same as the normal setup.
+
+**Known limitation**: on this build, the save only actually gets flushed to disk
+roughly every 7-10 seconds (verified empirically, not a fixed interval -- looks like
+the OS's own preferences-writing batches it), regardless of automancia's "update rate"
+setting. That ceiling is upstream of both `serve.command` and automancia itself, so
+don't expect real-time tracking to be as snappy as it is on the desktop builds, which
+write `.monkeystate` directly.
+
 ## HOW TO USE
 
 move around in cinco paus. pause after each move to let automancia catch up. it will (mostly) automatically track the game state.
